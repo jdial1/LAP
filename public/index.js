@@ -6,7 +6,7 @@ window.onload = function () {
     data: {
       tcolumns:[' ',1,2,3,4,5,6,7,8],
       socket_id_num:"NO USER ID",
-      op_id:0,
+      op_id:"Opponents_ID",
       letter_to_num : {'A':0,'B':1,'C':2,'D':3,'E':4,'F':5,'G':6,'H':7},
       header_rows:['A ','B ','C ','D ','E ','F ','G ','H '],
       f_col:'1',

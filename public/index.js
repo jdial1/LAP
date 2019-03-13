@@ -1,6 +1,6 @@
 /* Use Matrice math to look for connected sections */
 window.onload = function () {
-  Vue.use(new VueSocketIO({connection: 'https://battle-boxes.herokuapp.com}));
+  Vue.use(new VueSocketIO({connection: 'https://battle-boxes.herokuapp.com'}));
   new Vue({
     el: "#app",
     data: {
@@ -143,7 +143,7 @@ window.onload = function () {
         this.socket_id_num=data;
     },
 
-    
+
     SERVER_GUESS_RESPONSE:function(data){
       console.log(data);
       console.log('data: '+data);

@@ -1,7 +1,6 @@
 /* Use Matrice math to look for connected sections */
 window.onload = function () {
-  const port = process.env.PORT || 8080;
-  Vue.use(new VueSocketIO({connection: 'https://battle-boxes.herokuapp.com/:'+port}));
+  Vue.use(new VueSocketIO({connection: 'https://battle-boxes.herokuapp.com}));
   new Vue({
     el: "#app",
     data: {

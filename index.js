@@ -29,11 +29,12 @@ io.on('connection', function(socket) {
     console.log(animals[2]);
     random_animal=animals[Math.floor(Math.random()*animals.length)]+Math.floor(Math.random()*Math.floor(987));
     for (var i = 0; i < clients.length; i++) {
-        if (random_animal=clients[i]){
+        if (random_animal==clients[i]){
           random_animal=animals[Math.floor(Math.random()*animals.length)]+Math.floor(Math.random()*Math.floor(978));
         }
     }
-    clients[socket.id] =random_animal;
+    clients[socket.id] = random_animal;
+    clients[random_animal] = socket.id;
     console.log('GET_CLIENT_ID Animal: '+clients[socket.id]);
     console.log('NEW CLIENT: '+clients[socket.id]);
     online++;
@@ -44,19 +45,20 @@ io.on('connection', function(socket) {
     socket.on('SEND_GUESS', function(data) {
         console.log('SEND_GUESS');
         console.log(data);
-        console.log('SENDING to:'+data[5]);
-        if(data[5] != 0){io.to(data[5]).emit('GUESS',data)};
+        console.log('SENDING to:'+clients[data[5]]);
+        if(data[5] != 0){io.to(clients[data[5]]).emit('GUESS',data)};
     });
 
     socket.on('CLIENT_GUESS_RESPONSE', function(data) {
       console.log('CLIENT_GUESS_RESPONSE',data);
-      console.log('Sending SERVER_GUESS_RESPONSE to: ',data[3]);
-      if(data[3] != 0){io.to(data[3]).emit('SERVER_GUESS_RESPONSE',data)};
+      console.log('Sending SERVER_GUESS_RESPONSE to: ',clients[data[3]]);
+      if(data[3] != 0){io.to(clients[data[3]]).emit('SERVER_GUESS_RESPONSE',data)};
     });
 
     socket.on('disconnect', function () {
       socket.emit('disconnected');
       online = online - 1;
+      delete clients[clients[socket.id]];
       delete clients[socket.id];
     });
 });

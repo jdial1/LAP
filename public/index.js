@@ -43,18 +43,24 @@ window.onload = function () {
     },
     methods: {
       button_get_id: function(){
+
         console.log('Getting ID');
         this.$socket.emit('GET_CLIENT_ID');
+
       },
 
       button_guess_sent: function(){
+
         if(this.active_player_toggle!=0 ){
           this.$socket.emit('SEND_GUESS', [this.f_col-1,this.s_col-1,this.f_row,this.s_row,this.socket_id_num,this.op_id]);
           console.log('player guessed');
         }
         this.active_player_toggle=0;
+
       },
+
     	clear_my_grid: function () {
+
   			this.my_grid = [
           [0,0,0,0,0,0,0,0],
           [0,0,0,0,0,0,0,0],
@@ -66,7 +72,9 @@ window.onload = function () {
           [0,0,0,0,0,0,0,0],
       	];
     	},
+
      clear_op_grid: function () {
+
   			this.op_grid = [
           [0,0,0,0,0,0,0,0],
           [0,0,0,0,0,0,0,0],
@@ -78,14 +86,8 @@ window.onload = function () {
           [0,0,0,0,0,0,0,0],
       	];
     	},
-      chk_nbrs: function(grid,row,col,side,number){
 
-        // console.log('------');
-        // console.log('row: '+row);
-        // console.log('col: '+col);
-        // console.log('side: '+side);
-        // console.log('number: '+number);
-        // console.log('------');
+      chk_nbrs: function(grid,row,col,side,number){
 
         if (side == 'left'){
           if (col == 0){return true};
@@ -108,14 +110,18 @@ window.onload = function () {
           return true;
         }
       },
+
       set_grid:function(col_one,col_two,row_one,row_two,grid_nums){
+
         console.log('SETTING GRID: ',col_one,col_two,row_one,row_two,grid_nums)
+
         this.op_grid[row_one][col_one+1]=grid_nums[0];
         this.op_grid[row_one][col_two+1]=grid_nums[1];
         this.op_grid[row_two][col_one+1]=grid_nums[2];
         this.op_grid[row_two][col_two+1]=grid_nums[3];
         this.$forceUpdate();
       },
+
       get_grid:function(col_one,col_two,row_one,row_two){
 
         console.log('Get_grid1: '+col_one);
@@ -125,31 +131,30 @@ window.onload = function () {
         console.log('to_letter_value1: '+this.letter_to_num[row_one]);
         console.log('to_letter_value2: '+this.letter_to_num[row_two]);
         console.log(this.my_grid[col_one][this.letter_to_num[row_one]]);
+
         let grid_nums=[];
+
         grid_nums[0]=this.my_grid[this.letter_to_num[row_one]][col_one];
         grid_nums[1]=this.my_grid[this.letter_to_num[row_one]][col_two];
         grid_nums[2]=this.my_grid[this.letter_to_num[row_two]][col_one];
         grid_nums[3]=this.my_grid[this.letter_to_num[row_two]][col_two];
+
         console.log(grid_nums);
+
         return grid_nums;
       }
    },
 
   sockets:{
-    //Client sends GET_CLIENT_ID to server
-
-    //Player 1 sends SEND_GUESS to server
-    //Server sends GUESS to Player 2
-    //Player2 sends CLIENT_GUESS_RESPONSE to Server
-    //Server sends SERVER_GUESS_RESPONSE to Player 1
 
     CLIENT_ID:function(data){
+
         console.log('connection: '+data);
         this.socket_id_num=data;
     },
 
-
     SERVER_GUESS_RESPONSE:function(data){
+
       console.log(data);
       console.log('data: '+data);
       let grid_pos=data[0];
@@ -165,6 +170,7 @@ window.onload = function () {
       let col_two = grid_pos[1]-1;
       let row_one = this.letter_to_num[grid_pos[2]];
       let row_two = this.letter_to_num[grid_pos[3]];
+
       console.log(col_one);
       console.log(col_two);
       console.log(row_one);
@@ -175,8 +181,8 @@ window.onload = function () {
       this.set_grid(col_one,col_two,row_one,row_two,grid_nums);
     },
 
-
     GUESS:function(data){
+
         console.log('REQUESTED GUESS: '+data);
         this.op_id=data[4];
         let coords=[data[0],data[1],data[2],data[3]];
@@ -186,6 +192,7 @@ window.onload = function () {
         this.$socket.emit('CLIENT_GUESS_RESPONSE',data);
         this.active_player_toggle=1;
     },
+    
   },
 })
 }

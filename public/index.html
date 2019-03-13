@@ -17,30 +17,32 @@
 
   <i class="fas fa-smile-beam" style="color:green"></i>
   <button v-on:click="clear_my_grid"><i class="fas fa-eraser"></i></button>
-  <button v-on:click="my_grid_seen = !my_grid_seen"><i class="fas fa-eye-slash"></i></button>
+  <!-- <button v-on:click="my_grid_seen = !my_grid_seen"><i class="fas fa-eye-slash"></i></button> -->
   <button v-on:click="my_gridnum_seen = !my_gridnum_seen"><i class="fa fa-list-ol" aria-hidden="true"></i></button>
   <i class="fas fa-angry" style="color:red"></i>
   <button v-on:click="clear_op_grid"><i class="fas fa-eraser"></i></button>
-  <button v-on:click="op_grid_seen = !op_grid_seen"><i class="fas fa-eye-slash"></i></button>
+  <!-- <button v-on:click="op_grid_seen = !op_grid_seen"><i class="fas fa-eye-slash"></i></button> -->
   <button v-on:click="op_gridnum_seen = !op_gridnum_seen"><i class="fa fa-list-ol" aria-hidden="true"></i></button>
 
 
   <br>
-  <h1>Guess Vertex</h1>
-  <input class="guess_input first_in_row" v-model="f_col" type="text" placeholder="First Col(1)">
-  <input class="guess_input" type="text" v-model="s_col" placeholder="Second Col(2)">
-  <br>
-  <input class="guess_input " type="text" v-model="f_row" placeholder="First Row(A)">
-  <button class="go_button" type="button" v-on:click="button_guess_sent" name="button" >Guess!</button>
-  <br>
-  <input class="guess_input" type="text" v-model="s_row" placeholder="Second Row(B)">
-  <button class="go_button" type="button" v-on:click="button_get_id" name="button">Get ID</button>
+
   <hr>
   <table class="table_container">
   <tr>
     <td>
-    <h2><i class="fas fa-smile-beam fa-5x" style="color:green"></i></h2>
-    <input style="margin-left:220px;width:200px" type="text" v-model="socket_id_num" readonly>
+      <h1>Guess Vertex</h1>
+      <input class="guess_input first_in_row" v-model="f_col" type="text" placeholder="First Col(1)">
+      <input class="guess_input" type="text" v-model="s_col" placeholder="Second Col(2)">
+      <br>
+      <input class="guess_input " type="text" v-model="f_row" placeholder="First Row(A)">
+      <button class="go_button" type="button" v-on:click="button_guess_sent" name="button" >Guess!</button>
+      <br>
+      <input class="guess_input" type="text" v-model="s_row" placeholder="Second Row(B)">
+    <h2 class='smile' v-bind:class="{ active_player: active_player_toggle==1 }"><i class="fas fa-smile-beam fa-5x" style="color:green"></i></h2>
+
+    <input style="margin-left:220px;width:100px" type="text" v-model="socket_id_num" readonly>
+
     <table v-if="my_grid_seen" cellspacing="0" cellpadding="0" align="center">
     <thead>
       <tr>
@@ -99,7 +101,7 @@
     <td class="table_spacer">
    </td>
     <td>
-    <h2><i class="fas fa-angry fa-5x" style="color:red"></i></h2>
+    <h2 class='angry'  v-bind:class="{ active_player: active_player_toggle==0 }"><i class="fas fa-angry fa-5x" style="color:red"></i></h2>
     <input style="margin-left:220px;width:200px" type="text" v-model="op_id" placeholder="Opponents ID">
     <table v-if="op_grid_seen" cellspacing="0" cellpadding="0" align="center">
     <thead>

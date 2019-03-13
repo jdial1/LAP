@@ -5,8 +5,9 @@ window.onload = function () {
     el: "#app",
     data: {
       tcolumns:[' ',1,2,3,4,5,6,7,8],
-      socket_id_num:"NO USER ID",
-      op_id:"Opponents_ID",
+      socket_id_num:"Getting User ID...",
+      active_player_toggle:-1,
+      op_id:"",
       letter_to_num : {'A':0,'B':1,'C':2,'D':3,'E':4,'F':5,'G':6,'H':7},
       header_rows:['A ','B ','C ','D ','E ','F ','G ','H '],
       f_col:'1',
@@ -47,7 +48,11 @@ window.onload = function () {
       },
 
       button_guess_sent: function(){
-        this.$socket.emit('SEND_GUESS', [this.f_col-1,this.s_col-1,this.f_row,this.s_row,this.socket_id_num,this.op_id]);
+        if(this.active_player_toggle!=0 ){
+          this.$socket.emit('SEND_GUESS', [this.f_col-1,this.s_col-1,this.f_row,this.s_row,this.socket_id_num,this.op_id]);
+          console.log('player guessed');
+        }
+        this.active_player_toggle=0;
       },
     	clear_my_grid: function () {
   			this.my_grid = [
@@ -179,6 +184,7 @@ window.onload = function () {
         data=[coords,this.get_grid(data[0],data[1],data[2],data[3]),this.socket_id_num,this.op_id];
         console.log('SENDING: '+data);
         this.$socket.emit('CLIENT_GUESS_RESPONSE',data);
+        this.active_player_toggle=1;
     },
   },
 })

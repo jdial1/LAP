@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.2/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-socket.io@3.0.7/dist/vue-socketio.min.js"></script>
+
+    <script src="index.js"></script>
+</head>
+<body>
+<div id="app" v-cloak>
+
+  <i class="fas fa-smile-beam" style="color:green"></i>
+  <button v-on:click="clear_my_grid"><i class="fas fa-eraser"></i></button>
+  <button v-on:click="my_grid_seen = !my_grid_seen"><i class="fas fa-eye-slash"></i></button>
+  <button v-on:click="my_gridnum_seen = !my_gridnum_seen"><i class="fa fa-list-ol" aria-hidden="true"></i></button>
+  <i class="fas fa-angry" style="color:red"></i>
+  <button v-on:click="clear_op_grid"><i class="fas fa-eraser"></i></button>
+  <button v-on:click="op_grid_seen = !op_grid_seen"><i class="fas fa-eye-slash"></i></button>
+  <button v-on:click="op_gridnum_seen = !op_gridnum_seen"><i class="fa fa-list-ol" aria-hidden="true"></i></button>
+
+
+  <br>
+  <h1>Guess Vertex</h1>
+  <input class="guess_input first_in_row" v-model="f_col" type="text" placeholder="First Col(1)">
+  <input class="guess_input" type="text" v-model="s_col" placeholder="Second Col(2)">
+  <br>
+  <input class="guess_input " type="text" v-model="f_row" placeholder="First Row(A)">
+  <button class="go_button" type="button" v-on:click="button_guess_sent" name="button" >Guess!</button>
+  <br>
+  <input class="guess_input" type="text" v-model="s_row" placeholder="Second Row(B)">
+  <button class="go_button" type="button" v-on:click="button_get_id" name="button">Get ID</button>
+  <hr>
+  <table class="table_container">
+  <tr>
+    <td>
+    <h2><i class="fas fa-smile-beam fa-5x" style="color:green"></i></h2>
+    <input style="margin-left:220px;width:200px" type="text" v-model="socket_id_num" readonly>
+    <table v-if="my_grid_seen" cellspacing="0" cellpadding="0" align="center">
+    <thead>
+      <tr>
+        <th v-for="col in tcolumns">{{col}}</th>
+      </tr>
+    </thead>
+      <tbody>
+        <tr v-for="(row,row_index) in my_grid">
+          <th>{{header_rows[row_index]}}</th>
+          <td v-for="(key,key_index) in row">
+            <div class="one box" v-if="key==1" v-bind:class="{
+                                                    left_wall: chk_nbrs(my_grid,row_index,key_index,'left',my_grid[row_index][key_index]),
+                                                    right_wall: chk_nbrs(my_grid,row_index,key_index,'right',my_grid[row_index][key_index]),
+                                                    top_wall: chk_nbrs(my_grid,row_index,key_index,'top',my_grid[row_index][key_index]),
+                                                    bottom_wall: chk_nbrs(my_grid,row_index,key_index,'bottom',my_grid[row_index][key_index])
+                                                      }">
+              <input type="text" v-model="my_grid[row_index][key_index]" v-if="my_gridnum_seen">
+            </div>
+            <div class="two box" v-else-if="key==2" v-bind:class="{
+                                                    left_wall: chk_nbrs(my_grid,row_index,key_index,'left',my_grid[row_index][key_index]),
+                                                    right_wall: chk_nbrs(my_grid,row_index,key_index,'right',my_grid[row_index][key_index]),
+                                                    top_wall: chk_nbrs(my_grid,row_index,key_index,'top',my_grid[row_index][key_index]),
+                                                    bottom_wall: chk_nbrs(my_grid,row_index,key_index,'bottom',my_grid[row_index][key_index])
+                                                      }">
+              <input type="text" v-model="my_grid[row_index][key_index]" v-if="my_gridnum_seen">
+            </div>
+            <div class="three box" v-else-if="key==3" v-bind:class="{
+                                                    left_wall: chk_nbrs(my_grid,row_index,key_index,'left',my_grid[row_index][key_index]),
+                                                    right_wall: chk_nbrs(my_grid,row_index,key_index,'right',my_grid[row_index][key_index]),
+                                                    top_wall: chk_nbrs(my_grid,row_index,key_index,'top',my_grid[row_index][key_index]),
+                                                    bottom_wall: chk_nbrs(my_grid,row_index,key_index,'bottom',my_grid[row_index][key_index])
+                                                      }">
+              <input type="text" v-model="my_grid[row_index][key_index]" v-if="my_gridnum_seen">
+            </div>
+            <div class="four box" v-else-if="key==4" v-bind:class="{
+                                                    left_wall: chk_nbrs(my_grid,row_index,key_index,'left',my_grid[row_index][key_index]),
+                                                    right_wall: chk_nbrs(my_grid,row_index,key_index,'right',my_grid[row_index][key_index]),
+                                                    top_wall: chk_nbrs(my_grid,row_index,key_index,'top',my_grid[row_index][key_index]),
+                                                    bottom_wall: chk_nbrs(my_grid,row_index,key_index,'bottom',my_grid[row_index][key_index])
+                                                      }">
+              <input type="text" v-model="my_grid[row_index][key_index]" v-if="my_gridnum_seen">
+            </div>
+            <div class="zero box" v-else v-bind:class="{
+                                                    left_wall: chk_nbrs(my_grid,row_index,key_index,'left',my_grid[row_index][key_index]),
+                                                    right_wall: chk_nbrs(my_grid,row_index,key_index,'right',my_grid[row_index][key_index]),
+                                                    top_wall: chk_nbrs(my_grid,row_index,key_index,'top',my_grid[row_index][key_index]),
+                                                    bottom_wall: chk_nbrs(my_grid,row_index,key_index,'bottom',my_grid[row_index][key_index])
+                                                      }">
+              <input type="text" v-model="my_grid[row_index][key_index]" v-if="my_gridnum_seen">
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    </td>
+    <td class="table_spacer">
+   </td>
+    <td>
+    <h2><i class="fas fa-angry fa-5x" style="color:red"></i></h2>
+    <input style="margin-left:220px;width:200px" type="text" v-model="op_id" placeholder="Opponents ID">
+    <table v-if="op_grid_seen" cellspacing="0" cellpadding="0" align="center">
+    <thead>
+      <tr>
+        <th v-for="col in tcolumns">{{col}}</th>
+      </tr>
+    </thead>
+      <tbody>
+        <tr v-for="(row,row_index) in op_grid">
+          <th>{{header_rows[row_index]}}</th>
+          <td v-for="(key,key_index) in row">
+            <div class="one box" v-if="key==1" v-bind:class="{
+                                                    left_wall: chk_nbrs(op_grid,row_index,key_index,'left',op_grid[row_index][key_index]),
+                                                    right_wall: chk_nbrs(op_grid,row_index,key_index,'right',op_grid[row_index][key_index]),
+                                                    top_wall: chk_nbrs(op_grid,row_index,key_index,'top',op_grid[row_index][key_index]),
+                                                    bottom_wall: chk_nbrs(op_grid,row_index,key_index,'bottom',op_grid[row_index][key_index])
+                                                      }">
+              <input type="text" v-model="op_grid[row_index][key_index]" v-if="op_gridnum_seen">
+            </div>
+            <div class="two box" v-else-if="key==2" v-bind:class="{
+                                                    left_wall: chk_nbrs(op_grid,row_index,key_index,'left',op_grid[row_index][key_index]),
+                                                    right_wall: chk_nbrs(op_grid,row_index,key_index,'right',op_grid[row_index][key_index]),
+                                                    top_wall: chk_nbrs(op_grid,row_index,key_index,'top',op_grid[row_index][key_index]),
+                                                    bottom_wall: chk_nbrs(op_grid,row_index,key_index,'bottom',op_grid[row_index][key_index])
+                                                      }">
+              <input type="text" v-model="op_grid[row_index][key_index]" v-if="op_gridnum_seen">
+            </div>
+            <div class="three box" v-else-if="key==3" v-bind:class="{
+                                                    left_wall: chk_nbrs(op_grid,row_index,key_index,'left',op_grid[row_index][key_index]),
+                                                    right_wall: chk_nbrs(op_grid,row_index,key_index,'right',op_grid[row_index][key_index]),
+                                                    top_wall: chk_nbrs(op_grid,row_index,key_index,'top',op_grid[row_index][key_index]),
+                                                    bottom_wall: chk_nbrs(op_grid,row_index,key_index,'bottom',op_grid[row_index][key_index])
+                                                      }">
+              <input type="text" v-model="op_grid[row_index][key_index]" v-if="op_gridnum_seen">
+            </div>
+            <div class="four box" v-else-if="key==4" v-bind:class="{
+                                                    left_wall: chk_nbrs(op_grid,row_index,key_index,'left',op_grid[row_index][key_index]),
+                                                    right_wall: chk_nbrs(op_grid,row_index,key_index,'right',op_grid[row_index][key_index]),
+                                                    top_wall: chk_nbrs(op_grid,row_index,key_index,'top',op_grid[row_index][key_index]),
+                                                    bottom_wall: chk_nbrs(op_grid,row_index,key_index,'bottom',op_grid[row_index][key_index])
+                                                      }">
+              <input type="text" v-model="op_grid[row_index][key_index]" v-if="op_gridnum_seen">
+            </div>
+            <div class="zero box" v-else v-bind:class="{
+                                                    left_wall: chk_nbrs(op_grid,row_index,key_index,'left',op_grid[row_index][key_index]),
+                                                    right_wall: chk_nbrs(op_grid,row_index,key_index,'right',op_grid[row_index][key_index]),
+                                                    top_wall: chk_nbrs(op_grid,row_index,key_index,'top',op_grid[row_index][key_index]),
+                                                    bottom_wall: chk_nbrs(op_grid,row_index,key_index,'bottom',op_grid[row_index][key_index])
+                                                      }">
+              <input type="text" v-model="op_grid[row_index][key_index]" v-if="op_gridnum_seen">
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    </td>
+    </tr>
+  </table>
+</div>
+</body>
+</html>

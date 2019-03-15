@@ -1,13 +1,16 @@
 /* Use Matrice math to look for connected sections */
 window.onload = function () {
   Vue.use(new VueSocketIO({connection: 'https://battle-boxes.herokuapp.com'}));
+  // Vue.use(new VueSocketIO({connection: 'http://192.168.1.236:8080/'}));
   new Vue({
     el: "#app",
     data: {
       tcolumns:[' ',1,2,3,4,5,6,7,8],
-      socket_id_num:"Getting User ID...",
+      my_id:"Getting User ID...",
       active_player_toggle:-1,
       op_id:"",
+      users:0,
+      users_list:{},
       letter_to_num : {'A':0,'B':1,'C':2,'D':3,'E':4,'F':5,'G':6,'H':7},
       header_rows:['A ','B ','C ','D ','E ','F ','G ','H '],
       f_col:'1',
@@ -52,7 +55,7 @@ window.onload = function () {
       button_guess_sent: function(){
 
         if(this.active_player_toggle!=0 ){
-          this.$socket.emit('SEND_GUESS', [this.f_col-1,this.s_col-1,this.f_row,this.s_row,this.socket_id_num,this.op_id]);
+          this.$socket.emit('SEND_GUESS', [this.f_col-1,this.s_col-1,this.f_row,this.s_row,this.my_id,this.op_id]);
           console.log('player guessed');
         }
         this.active_player_toggle=0;
@@ -149,8 +152,8 @@ window.onload = function () {
 
     CLIENT_ID:function(data){
 
-        console.log('connection: '+data);
-        this.socket_id_num=data;
+        console.log('connection: '+data.name);
+        this.my_id=data.name;
     },
 
     SERVER_GUESS_RESPONSE:function(data){
@@ -184,15 +187,23 @@ window.onload = function () {
     GUESS:function(data){
 
         console.log('REQUESTED GUESS: '+data);
+        console.log('data4',data[4]);
         this.op_id=data[4];
+        console.log('op',this.op_id);
         let coords=[data[0],data[1],data[2],data[3]];
         console.log('GET GRID:',data[0],data[1],data[2],data[3]);
-        data=[coords,this.get_grid(data[0],data[1],data[2],data[3]),this.socket_id_num,this.op_id];
+        data=[coords,this.get_grid(data[0],data[1],data[2],data[3]),this.my_id,this.op_id];
         console.log('SENDING: '+data);
         this.$socket.emit('CLIENT_GUESS_RESPONSE',data);
         this.active_player_toggle=1;
     },
-    
+    USER_COUNT_UPDATE:function(data){
+
+      console.log('User Count: ',data[1]);
+      console.log('Users: ',data[2]);
+      this.users=Object.keys(data[1]).length;
+      this.users_list=data[1];
+    },
   },
 })
 }

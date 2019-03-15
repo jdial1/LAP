@@ -22,43 +22,61 @@ var animals = [
   'Otter','Penguin','Quokka','Rabbit','Sheep',
   'Tortoise','Monkey','Weasel','Zebra'
 ];
+
 var clients ={};
 var online =0;
+
+function user_count(inc,socket){
+
+  if(inc){
+    online++;
+    io.emit('USER_COUNT_UPDATE',[online,clients]);
+    return;
+  }
+  console.log('INC',inc);
+  online--;
+  for (i = 0; i < Object.keys(clients).length; i++) {
+    console.log('Removal');
+    console.log(online);
+    console.log(clients[Object.keys(clients)[i]]);
+    console.log(socket.id);
+
+    if(clients[Object.keys(clients)[i]].socket == socket.id){
+      delete clients[[Object.keys(clients)[i]]];
+    }
+  }
+
+  io.emit('USER_COUNT_UPDATE',[online,clients]);
+  return;
+};
+
+
 io.on('connection', function(socket) {
 
     console.log(animals[2]);
     random_animal=animals[Math.floor(Math.random()*animals.length)]+Math.floor(Math.random()*Math.floor(987));
-    for (var i = 0; i < clients.length; i++) {
-        if (random_animal==clients[i]){
-          random_animal=animals[Math.floor(Math.random()*animals.length)]+Math.floor(Math.random()*Math.floor(978));
-        }
-    }
-    clients[socket.id] = random_animal;
-    clients[random_animal] = socket.id;
-    console.log('GET_CLIENT_ID Animal: '+clients[socket.id]);
-    console.log('NEW CLIENT: '+clients[socket.id]);
-    online++;
-    console.log('Client List: '+JSON.stringify(clients,null,1));
+
+    clients[random_animal] = {'name':random_animal,'socket':socket.id};
+    console.log('GET_CLIENT_ID Animal: '+clients[random_animal].name);
+    user_count(1);
     console.log('Online: '+online);
-    io.to(socket.id).emit('CLIENT_ID',clients[socket.id]);
+    io.to(socket.id).emit('CLIENT_ID',clients[random_animal]);
 
     socket.on('SEND_GUESS', function(data) {
         console.log('SEND_GUESS');
         console.log(data);
-        console.log('SENDING to:'+clients[data[5]]);
-        if(data[5] != 0){io.to(clients[data[5]]).emit('GUESS',data)};
+        console.log('SENDING to:'+clients[data[5]].name);
+        if(data[5] != 0){io.to(clients[data[5]].socket).emit('GUESS',data)};
     });
 
     socket.on('CLIENT_GUESS_RESPONSE', function(data) {
       console.log('CLIENT_GUESS_RESPONSE',data);
-      console.log('Sending SERVER_GUESS_RESPONSE to: ',clients[data[3]]);
-      if(data[3] != 0){io.to(clients[data[3]]).emit('SERVER_GUESS_RESPONSE',data)};
+      console.log('Sending SERVER_GUESS_RESPONSE to: ',clients[data[3]].name);
+      if(data[3] != 0){io.to(clients[data[3]].socket).emit('SERVER_GUESS_RESPONSE',data)};
     });
 
     socket.on('disconnect', function () {
       socket.emit('disconnected');
-      online = online - 1;
-      delete clients[clients[socket.id]];
-      delete clients[socket.id];
+      user_count(0,socket);
     });
 });

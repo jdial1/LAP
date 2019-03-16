@@ -58,9 +58,10 @@ io.on('connection', function(socket) {
 
     clients[random_animal] = {'name':random_animal,'socket':socket.id};
     console.log('GET_CLIENT_ID Animal: '+clients[random_animal].name);
+    io.to(socket.id).emit('CLIENT_ID',clients[random_animal]);
     user_count(1);
     console.log('Online: '+online);
-    io.to(socket.id).emit('CLIENT_ID',clients[random_animal]);
+
 
     socket.on('SEND_GUESS', function(data) {
         console.log('SEND_GUESS');

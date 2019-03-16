@@ -198,7 +198,6 @@ window.onload = function () {
         this.active_player_toggle=1;
     },
     USER_COUNT_UPDATE:function(data){
-
       console.log('User Count: ',data[1]);
       this.users=Object.keys(data[1]).length;
       console.log(this.my_id);

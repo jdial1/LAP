@@ -200,8 +200,10 @@ window.onload = function () {
     USER_COUNT_UPDATE:function(data){
 
       console.log('User Count: ',data[1]);
-      console.log('Users: ',data[2]);
       this.users=Object.keys(data[1]).length;
+      console.log(this.my_id);
+      delete data[1][this.my_id];
+      console.log(data[1][this.my_id]);
       this.users_list=data[1];
     },
   },

@@ -10,8 +10,7 @@ which, only the number of squares which come from each of the 4 sections.
 Eventually one of the players figures out the opponent's diagram and declares a win. 
 Of course if it turns out the player is wrong, then the player loses!
 
-Both players get an equal number of turns, so that they could theoretically 
-both declare on the same turn, resulting in a tie if they are both right or both wrong. I'm guessing that's not common in practice.
+The fact that each of the 4 regions has exactly 16 contiguous squares is of course crucial and helps you deduce things with a variety of types of reasoning as you get more information.
 
 https://boardgamegeek.com/thread/712697/neat-puzzle-solving-game-only-needs-graph-paper-an
 

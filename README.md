@@ -1,5 +1,5 @@
 # LAP
-Concretely, both players secretly mark 4 regions of 16 squares each on their hidden 8x8 grid. 
+Both players secretly mark 4 regions of 16 squares each on their hidden 8x8 grid. 
 Then they take turns asking about a given 2x2 section of the opponent's grid.
 E.g. in the sample arrangement shown here, asking about "AB12" (the upper left corner) 
 would receive an answer that "3 of the squares are in section I and 1 of the squares 

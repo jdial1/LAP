@@ -1,4 +1,4 @@
-# LAP-Gridpaper-Game
+# LAP
 Concretely, both players secretly mark 4 regions of 16 squares each on their hidden 8x8 grid. 
 Then they take turns asking about a given 2x2 section of the opponent's grid.
 E.g. in the sample arrangement shown here, asking about "AB12" (the upper left corner) 

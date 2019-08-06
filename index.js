@@ -12,7 +12,7 @@ app.get('/', (request, response) => {
 });
 
 // Initialize app
-const server = app.listen(port, () => console.log('App Started'));
+const server = app.listen(port, () => console.log('App Started',port));
 
 const io = require('socket.io')(server);
 

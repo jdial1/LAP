@@ -75,10 +75,13 @@ io.on('connection', function(socket) {
     });
 
     socket.on('SET_LOOKING_FOR_OPP_FLAG', function(data) {
+      console.log('SET_LOOKING_FOR_OPP_FLAG',data);
       clients[data.name].looking_for_opp = data.looking_for_opp;
     });
 
     socket.on('GET_LOOKING_FOR_OPP_FLAG', function(data) {
+      console.log('GET_LOOKING_FOR_OPP_FLAG',data);
+      console.log('GET_LOOKING_FOR_OPP_FLAG results: ',clients.filter(client => client.looking_for_opp == true));
       io.to(data.socket).emit(clients.filter(client => client.looking_for_opp == true));
     });
 

@@ -16,11 +16,10 @@ const server = app.listen(port, () => console.log('App Started',port));
 
 const io = require('socket.io')(server);
 
-var animals = [
-  'Bear','Cat','Duck','Elephant','Giraffe','Hamster',
-  'Iguana','Jerboa','Kangaroo','Manatee','Numbat',
-  'Otter','Penguin','Quokka','Rabbit','Sheep',
-  'Tortoise','Monkey','Weasel','Zebra'
+var robotName = [
+  'Beep','Bop','Boop','Zing','Zap','Deet',
+  'Doot','Micro','Bult','Ratchet','Tink',
+  'Gadget','Rust '
 ];
 
 var clients ={};
@@ -53,15 +52,14 @@ function user_count(inc,socket){
 
 io.on('connection', function(socket) {
 
-    console.log(animals[2]);
-    random_animal=animals[Math.floor(Math.random()*animals.length)]+Math.floor(Math.random()*Math.floor(987));
+    console.log(robotName[2]);
+    random_robotName=robotName[Math.floor(Math.random()*robotName.length)]+Math.floor(Math.random()*Math.floor(987));
 
-    clients[random_animal] = {'name':random_animal,'socket':socket.id};
-    console.log('GET_CLIENT_ID Animal: '+clients[random_animal].name);
-    io.to(socket.id).emit('CLIENT_ID',clients[random_animal]);
+    clients[random_robotName] = {'name':random_robotName,'socket':socket.id,'looking_for_opp':false};
+    console.log('GET_CLIENT_ID robotName: '+clients[random_robotName].name);
+    io.to(socket.id).emit('CLIENT_ID',clients[random_robotName]);
     user_count(1);
     console.log('Online: '+online);
-
 
     socket.on('SEND_GUESS', function(data) {
         console.log('SEND_GUESS');
@@ -74,6 +72,14 @@ io.on('connection', function(socket) {
       console.log('CLIENT_GUESS_RESPONSE',data);
       console.log('Sending SERVER_GUESS_RESPONSE to: ',clients[data[3]].name);
       if(data[3] != 0){io.to(clients[data[3]].socket).emit('SERVER_GUESS_RESPONSE',data)};
+    });
+
+    socket.on('SET_LOOKING_FOR_OPP_FLAG', function(data) {
+      clients[data.name].looking_for_opp = data.looking_for_opp;
+    });
+
+    socket.on('GET_LOOKING_FOR_OPP_FLAG', function(data) {
+      io.to(data.socket).emit(clients.filter(client => client.looking_for_opp == true));
     });
 
     socket.on('disconnect', function () {

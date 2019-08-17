@@ -81,7 +81,7 @@ io.on('connection', function(socket) {
       io.emit('USER_COUNT_UPDATE',[online,clients]);
     }
     catch (e) {
-      print(e)
+      console.log(e);
     }
     });
 

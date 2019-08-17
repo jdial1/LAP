@@ -64,8 +64,10 @@ window.onload = function () {
       },
 
       looking_button_sent: function(){
-          this.$socket.emit('SET_LOOKING_FOR_OPP_FLAG', [{'name':this.my_id,'looking_for_opp':this.look_for_op}]);
-          this.look_for_op=!this.look_for_op;
+                  this.look_for_op=!this.look_for_op;
+        console.log({'name':this.my_id,'looking_for_opp':this.look_for_op});
+          this.$socket.emit('SET_LOOKING_FOR_OPP_FLAG', {'name':this.my_id,'looking_for_opp':this.look_for_op});
+
       },
 
 

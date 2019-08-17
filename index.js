@@ -82,6 +82,7 @@ io.on('connection', function(socket) {
     socket.on('GET_LOOKING_FOR_OPP_FLAG', function(data) {
       console.log('GET_LOOKING_FOR_OPP_FLAG',data);
       console.log('GET_LOOKING_FOR_OPP_FLAG results: ',Object.values(clients).filter(client => client.looking_for_opp == true));
+      console.log('Socket: ',data.socket);
       io.to(data.socket).emit(Object.values(clients).filter(client => client.looking_for_opp == true));
     });
 

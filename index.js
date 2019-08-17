@@ -77,13 +77,7 @@ io.on('connection', function(socket) {
     socket.on('SET_LOOKING_FOR_OPP_FLAG', function(data) {
       console.log('SET_LOOKING_FOR_OPP_FLAG',data);
       clients[data.name].looking_for_opp = data.looking_for_opp;
-    });
-
-    socket.on('GET_LOOKING_FOR_OPP_FLAG', function(data) {
-      console.log('GET_LOOKING_FOR_OPP_FLAG',data);
-      console.log('GET_LOOKING_FOR_OPP_FLAG results: ',Object.values(clients).filter(client => client.looking_for_opp == true));
-      console.log('Socket: ',data.socket);
-      io.to(data.socket).emit(Object.values(clients).filter(client => client.looking_for_opp == true));
+      io.emit('USER_COUNT_UPDATE',[online,clients]);
     });
 
     socket.on('disconnect', function () {

@@ -55,7 +55,7 @@ io.on('connection', function(socket) {
     console.log(robotName[2]);
     random_robotName=robotName[Math.floor(Math.random()*robotName.length)]+Math.round(Math.random())+Math.round(Math.random())+Math.round(Math.random())+Math.round(Math.random());
 
-    clients[random_robotName] = {'name':random_robotName,'socket':socket.id,'looking_for_opp':false};
+    clients[random_robotName] = {'name':random_robotName,'socket':socket.id,'looking_for_opp':false,};
     console.log('GET_CLIENT_ID robotName: '+clients[random_robotName].name);
     io.to(socket.id).emit('CLIENT_ID',clients[random_robotName]);
     user_count(1);
@@ -81,8 +81,8 @@ io.on('connection', function(socket) {
 
     socket.on('GET_LOOKING_FOR_OPP_FLAG', function(data) {
       console.log('GET_LOOKING_FOR_OPP_FLAG',data);
-      console.log('GET_LOOKING_FOR_OPP_FLAG results: ',clients.filter(client => client.looking_for_opp == true));
-      io.to(data.socket).emit(clients.filter(client => client.looking_for_opp == true));
+      console.log('GET_LOOKING_FOR_OPP_FLAG results: ',Object.values(clients).filter(client => client.looking_for_opp == true));
+      io.to(data.socket).emit(Object.values(clients).filter(client => client.looking_for_opp == true));
     });
 
     socket.on('disconnect', function () {

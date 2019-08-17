@@ -21,6 +21,7 @@ window.onload = function () {
       op_grid_seen:1,
       my_gridnum_seen:1,
       op_gridnum_seen:1,
+      look_for_op:false,
       my_grid:
       [
         [1,0,3,0,0,4,0,4],
@@ -61,6 +62,12 @@ window.onload = function () {
         this.active_player_toggle=0;
 
       },
+
+      looking_button_sent: function(){
+          this.$socket.emit('SET_LOOKING_FOR_OPP_FLAG', [{'name':this.my_id,'looking_for_opp':this.look_for_op}]);
+          this.look_for_op=!this.look_for_op;
+      },
+
 
     	clear_my_grid: function () {
 

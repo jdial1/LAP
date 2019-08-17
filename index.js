@@ -53,7 +53,7 @@ function user_count(inc,socket){
 io.on('connection', function(socket) {
 
     console.log(robotName[2]);
-    random_robotName=robotName[Math.floor(Math.random()*robotName.length)]+Math.floor(Math.random()*Math.floor(987));
+    random_robotName=robotName[Math.floor(Math.random()*robotName.length)]+Math.round(Math.random())+Math.round(Math.random())+Math.round(Math.random())+Math.round(Math.random());
 
     clients[random_robotName] = {'name':random_robotName,'socket':socket.id,'looking_for_opp':false};
     console.log('GET_CLIENT_ID robotName: '+clients[random_robotName].name);

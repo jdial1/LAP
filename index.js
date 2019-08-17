@@ -76,8 +76,13 @@ io.on('connection', function(socket) {
 
     socket.on('SET_LOOKING_FOR_OPP_FLAG', function(data) {
       console.log('SET_LOOKING_FOR_OPP_FLAG',data);
+      try{
       clients[data.name].looking_for_opp = data.looking_for_opp;
       io.emit('USER_COUNT_UPDATE',[online,clients]);
+    }
+    catch (e) {
+      print(e)
+    }
     });
 
     socket.on('disconnect', function () {

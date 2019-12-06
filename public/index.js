@@ -54,7 +54,7 @@ window.onload = () => {
 
       button_guess_sent: function(){
 
-        if(this.active_player_toggle!=0 ){
+        if(this.active_player_toggle !== 0 ){
           this.$socket.emit('SEND_GUESS', [this.f_col-1,this.s_col-1,this.f_row,this.s_row,this.my_id,this.op_id]);
           console.log('player guessed');
         }
@@ -98,24 +98,24 @@ window.onload = () => {
 
       chk_nbrs: (grid,row,col,side,number) => {
 
-        if (side == 'left'){
-          if (col == 0){return true};
-          if (grid[row][col-1] == number){return false};
+        if (side === 'left'){
+          if (col === 0){return true};
+          if (grid[row][col-1] === number){return false};
           return true;
         }
-        if (side == 'right'){
-          if (col == 7){return true};
-          if (grid[row][col+1] == number){return false};
+        if (side === 'right'){
+          if (col === 7){return true};
+          if (grid[row][col+1] === number){return false};
           return true;
         }
-        if (side == 'top'){
-          if (row == 0){return true};
-          if (grid[row-1][col] == number){return false};
+        if (side === 'top'){
+          if (row === 0){return true};
+          if (grid[row-1][col] === number){return false};
           return true;
         }
-        if (side == 'bottom'){
-          if (row == 7){return true};
-          if (grid[row+1][col] == number){return false};
+        if (side === 'bottom'){
+          if (row === 7){return true};
+          if (grid[row+1][col] === number){return false};
           return true;
         }
       },

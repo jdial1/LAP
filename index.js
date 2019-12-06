@@ -12,7 +12,7 @@ app.get('/', (request, response) => {
 });
 
 // Initialize app
-const server = app.listen(port, () => console.log('App Started',port));
+const server = app.listen(port, () => );
 
 const io = require('socket.io')(server);
 
@@ -32,14 +32,8 @@ function user_count(inc,socket){
     io.emit('USER_COUNT_UPDATE',[online,clients]);
     return;
   }
-  console.log('INC',inc);
   online--;
   for (i = 0; i < Object.keys(clients).length; i++) {
-    console.log('Removal');
-    console.log(online);
-    console.log(clients[Object.keys(clients)[i]]);
-    console.log(socket.id);
-
     if(clients[Object.keys(clients)[i]].socket === socket.id){
       delete clients[[Object.keys(clients)[i]]];
     }
@@ -52,30 +46,21 @@ function user_count(inc,socket){
 
 io.on('connection', socket => {
 
-  console.log(robotName[2]);
   random_robotName=robotName[Math.floor(Math.random()*robotName.length)]+Math.round(Math.random())+Math.round(Math.random())+Math.round(Math.random())+Math.round(Math.random());
 
   clients[random_robotName] = {'name':random_robotName,'socket':socket.id,'looking_for_opp':false,};
-  console.log('GET_CLIENT_ID robotName: '+clients[random_robotName].name);
   io.to(socket.id).emit('CLIENT_ID',clients[random_robotName]);
   user_count(1);
-  console.log('Online: '+online);
 
   socket.on('SEND_GUESS', data => {
-    console.log('SEND_GUESS');
-    console.log(data);
-    console.log('SENDING to:'+clients[data[5]].name);
     if(data[5] !== 0){io.to(clients[data[5]].socket).emit('GUESS',data)};
   });
 
   socket.on('CLIENT_GUESS_RESPONSE', data => {
-    console.log('CLIENT_GUESS_RESPONSE',data);
-    console.log('Sending SERVER_GUESS_RESPONSE to: ',clients[data[3]].name);
     if(data[3] !== 0){io.to(clients[data[3]].socket).emit('SERVER_GUESS_RESPONSE',data)};
   });
 
   socket.on('SET_LOOKING_FOR_OPP_FLAG', data => {
-    console.log('SET_LOOKING_FOR_OPP_FLAG',data);
     try{
       clients[data.name].looking_for_opp = data.looking_for_opp;
       io.emit('USER_COUNT_UPDATE',[online,clients]);

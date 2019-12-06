@@ -1,5 +1,5 @@
 /* Use Matrice math to look for connected sections */
-window.onload = function () {
+window.onload = () => {
   Vue.use(new VueSocketIO({connection: 'https://battle-boxes.herokuapp.com'}));
   // Vue.use(new VueSocketIO({connection: 'http://192.168.1.236:8080/'}));
   new Vue({
@@ -24,25 +24,25 @@ window.onload = function () {
       look_for_op:false,
       my_grid:
       [
-        [1,0,3,0,0,4,0,4],
-        [2,0,0,4,4,4,0,4],
-        [3,3,0,1,0,4,0,4],
-        [4,3,3,1,1,4,4,4],
-        [1,3,1,1,0,0,3,0],
-        [2,3,2,0,0,1,0,0],
-        [3,3,2,0,2,0,4,0],
-        [4,0,2,0,4,0,0,4]
+      [1,0,3,0,0,4,0,4],
+      [2,0,0,4,4,4,0,4],
+      [3,3,0,1,0,4,0,4],
+      [4,3,3,1,1,4,4,4],
+      [1,3,1,1,0,0,3,0],
+      [2,3,2,0,0,1,0,0],
+      [3,3,2,0,2,0,4,0],
+      [4,0,2,0,4,0,0,4]
       ],
       op_grid:
       [
-        [1,0,3,0,0,4,0,0],
-        [1,0,0,4,4,2,3,0],
-        [1,0,0,1,0,2,0,3],
-        [1,0,2,0,1,4,3,0],
-        [1,0,0,1,0,0,3,0],
-        [2,0,2,0,0,2,0,0],
-        [3,1,0,0,2,0,4,0],
-        [4,0,2,0,1,0,0,4]
+      [1,0,3,0,0,4,0,0],
+      [1,0,0,4,4,2,3,0],
+      [1,0,0,1,0,2,0,3],
+      [1,0,2,0,1,4,3,0],
+      [1,0,0,1,0,0,3,0],
+      [2,0,2,0,0,2,0,0],
+      [3,1,0,0,2,0,4,0],
+      [4,0,2,0,1,0,0,4]
       ]
     },
     methods: {
@@ -50,7 +50,6 @@ window.onload = function () {
 
         console.log('Getting ID');
         this.$socket.emit('GET_CLIENT_ID');
-
       },
 
       button_guess_sent: function(){
@@ -60,46 +59,44 @@ window.onload = function () {
           console.log('player guessed');
         }
         this.active_player_toggle=0;
-
       },
 
       looking_button_sent: function(){
-                  this.look_for_op=!this.look_for_op;
+        this.look_for_op=!this.look_for_op;
         console.log({'name':this.my_id,'looking_for_opp':this.look_for_op});
-          this.$socket.emit('SET_LOOKING_FOR_OPP_FLAG', {'name':this.my_id,'looking_for_opp':this.look_for_op});
-
+        this.$socket.emit('SET_LOOKING_FOR_OPP_FLAG', {'name':this.my_id,'looking_for_opp':this.look_for_op});
       },
 
 
-    	clear_my_grid: function () {
+      clear_my_grid: function () {
 
-  			this.my_grid = [
-          [0,0,0,0,0,0,0,0],
-          [0,0,0,0,0,0,0,0],
-          [0,0,0,0,0,0,0,0],
-          [0,0,0,0,0,0,0,0],
-          [0,0,0,0,0,0,0,0],
-          [0,0,0,0,0,0,0,0],
-          [0,0,0,0,0,0,0,0],
-          [0,0,0,0,0,0,0,0],
+        this.my_grid = [
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
       	];
-    	},
+      },
 
-     clear_op_grid: function () {
+      clear_op_grid: function () {
 
-  			this.op_grid = [
-          [0,0,0,0,0,0,0,0],
-          [0,0,0,0,0,0,0,0],
-          [0,0,0,0,0,0,0,0],
-          [0,0,0,0,0,0,0,0],
-          [0,0,0,0,0,0,0,0],
-          [0,0,0,0,0,0,0,0],
-          [0,0,0,0,0,0,0,0],
-          [0,0,0,0,0,0,0,0],
+        this.op_grid = [
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0],
       	];
-    	},
+      },
 
-      chk_nbrs: function(grid,row,col,side,number){
+      chk_nbrs: (grid,row,col,side,number) => {
 
         if (side == 'left'){
           if (col == 0){return true};
@@ -125,7 +122,7 @@ window.onload = function () {
 
       set_grid:function(col_one,col_two,row_one,row_two,grid_nums){
 
-        console.log('SETTING GRID: ',col_one,col_two,row_one,row_two,grid_nums)
+        console.log('SETTING GRID: ',col_one,col_two,row_one,row_two,grid_nums);
 
         this.op_grid[row_one][col_one+1]=grid_nums[0];
         this.op_grid[row_one][col_two+1]=grid_nums[1];
@@ -155,45 +152,45 @@ window.onload = function () {
 
         return grid_nums;
       }
-   },
+    },
 
-  sockets:{
+    sockets:{
 
-    CLIENT_ID:function(data){
+      CLIENT_ID:function(data){
 
         console.log('connection: '+data.name);
         this.my_id=data.name;
-    },
+      },
 
-    SERVER_GUESS_RESPONSE:function(data){
+      SERVER_GUESS_RESPONSE:function(data){
 
-      console.log(data);
-      console.log('data: '+data);
-      let grid_pos=data[0];
-      let grid_nums=data[1];
-      console.log('grid_pos: '+grid_pos);
-      console.log('grid_nums: '+grid_nums);
+        console.log(data);
+        console.log('data: '+data);
+        let grid_pos=data[0];
+        let grid_nums=data[1];
+        console.log('grid_pos: '+grid_pos);
+        console.log('grid_nums: '+grid_nums);
 
-      console.log('letter_to_num: '+grid_pos[2]);
-      console.log('letter_to_num: '+this.letter_to_num[grid_pos[2]]);
-      console.log('grid_pos: '+grid_pos[2]);
+        console.log('letter_to_num: '+grid_pos[2]);
+        console.log('letter_to_num: '+this.letter_to_num[grid_pos[2]]);
+        console.log('grid_pos: '+grid_pos[2]);
 
-      let col_one = grid_pos[0]-1;
-      let col_two = grid_pos[1]-1;
-      let row_one = this.letter_to_num[grid_pos[2]];
-      let row_two = this.letter_to_num[grid_pos[3]];
+        let col_one = grid_pos[0]-1;
+        let col_two = grid_pos[1]-1;
+        let row_one = this.letter_to_num[grid_pos[2]];
+        let row_two = this.letter_to_num[grid_pos[3]];
 
-      console.log(col_one);
-      console.log(col_two);
-      console.log(row_one);
-      console.log(row_two);
+        console.log(col_one);
+        console.log(col_two);
+        console.log(row_one);
+        console.log(row_two);
 
-      console.log(this.op_grid);
-      console.log("COMPLETED GUESS RESPONSE:  "+data);
-      this.set_grid(col_one,col_two,row_one,row_two,grid_nums);
-    },
+        console.log(this.op_grid);
+        console.log("COMPLETED GUESS RESPONSE:  "+data);
+        this.set_grid(col_one,col_two,row_one,row_two,grid_nums);
+      },
 
-    GUESS:function(data){
+      GUESS:function(data){
 
         console.log('REQUESTED GUESS: '+data);
         console.log('data4',data[4]);
@@ -205,15 +202,15 @@ window.onload = function () {
         console.log('SENDING: '+data);
         this.$socket.emit('CLIENT_GUESS_RESPONSE',data);
         this.active_player_toggle=1;
-    },
-    USER_COUNT_UPDATE:function(data){
-      console.log('User Count: ',data[1]);
-      this.users=Object.keys(data[1]).length;
-      console.log(this.my_id);
-      delete data[1][this.my_id];
-      console.log(data[1][this.my_id]);
-      this.users_list=data[1];
-    },
+      },
+      USER_COUNT_UPDATE:function(data){
+        console.log('User Count: ',data[1]);
+        this.users=Object.keys(data[1]).length;
+        console.log(this.my_id);
+        delete data[1][this.my_id];
+        console.log(data[1][this.my_id]);
+        this.users_list=data[1];
+      },
   },
-})
+});
 }

@@ -50,43 +50,43 @@ function user_count(inc,socket){
 };
 
 
-io.on('connection', function(socket) {
+io.on('connection', socket => {
 
-    console.log(robotName[2]);
-    random_robotName=robotName[Math.floor(Math.random()*robotName.length)]+Math.round(Math.random())+Math.round(Math.random())+Math.round(Math.random())+Math.round(Math.random());
+  console.log(robotName[2]);
+  random_robotName=robotName[Math.floor(Math.random()*robotName.length)]+Math.round(Math.random())+Math.round(Math.random())+Math.round(Math.random())+Math.round(Math.random());
 
-    clients[random_robotName] = {'name':random_robotName,'socket':socket.id,'looking_for_opp':false,};
-    console.log('GET_CLIENT_ID robotName: '+clients[random_robotName].name);
-    io.to(socket.id).emit('CLIENT_ID',clients[random_robotName]);
-    user_count(1);
-    console.log('Online: '+online);
+  clients[random_robotName] = {'name':random_robotName,'socket':socket.id,'looking_for_opp':false,};
+  console.log('GET_CLIENT_ID robotName: '+clients[random_robotName].name);
+  io.to(socket.id).emit('CLIENT_ID',clients[random_robotName]);
+  user_count(1);
+  console.log('Online: '+online);
 
-    socket.on('SEND_GUESS', function(data) {
-        console.log('SEND_GUESS');
-        console.log(data);
-        console.log('SENDING to:'+clients[data[5]].name);
-        if(data[5] != 0){io.to(clients[data[5]].socket).emit('GUESS',data)};
-    });
+  socket.on('SEND_GUESS', data => {
+    console.log('SEND_GUESS');
+    console.log(data);
+    console.log('SENDING to:'+clients[data[5]].name);
+    if(data[5] != 0){io.to(clients[data[5]].socket).emit('GUESS',data)};
+  });
 
-    socket.on('CLIENT_GUESS_RESPONSE', function(data) {
-      console.log('CLIENT_GUESS_RESPONSE',data);
-      console.log('Sending SERVER_GUESS_RESPONSE to: ',clients[data[3]].name);
-      if(data[3] != 0){io.to(clients[data[3]].socket).emit('SERVER_GUESS_RESPONSE',data)};
-    });
+  socket.on('CLIENT_GUESS_RESPONSE', data => {
+    console.log('CLIENT_GUESS_RESPONSE',data);
+    console.log('Sending SERVER_GUESS_RESPONSE to: ',clients[data[3]].name);
+    if(data[3] != 0){io.to(clients[data[3]].socket).emit('SERVER_GUESS_RESPONSE',data)};
+  });
 
-    socket.on('SET_LOOKING_FOR_OPP_FLAG', function(data) {
-      console.log('SET_LOOKING_FOR_OPP_FLAG',data);
-      try{
+  socket.on('SET_LOOKING_FOR_OPP_FLAG', data => {
+    console.log('SET_LOOKING_FOR_OPP_FLAG',data);
+    try{
       clients[data.name].looking_for_opp = data.looking_for_opp;
       io.emit('USER_COUNT_UPDATE',[online,clients]);
     }
     catch (e) {
       console.log(e);
-    }
-    });
+    };
+  });
 
-    socket.on('disconnect', function () {
-      socket.emit('disconnected');
-      user_count(0,socket);
-    });
+  socket.on('disconnect', () => {
+    socket.emit('disconnected');
+    user_count(0,socket);
+  });
 });

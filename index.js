@@ -40,7 +40,7 @@ function user_count(inc,socket){
     console.log(clients[Object.keys(clients)[i]]);
     console.log(socket.id);
 
-    if(clients[Object.keys(clients)[i]].socket == socket.id){
+    if(clients[Object.keys(clients)[i]].socket === socket.id){
       delete clients[[Object.keys(clients)[i]]];
     }
   }
@@ -65,13 +65,13 @@ io.on('connection', socket => {
     console.log('SEND_GUESS');
     console.log(data);
     console.log('SENDING to:'+clients[data[5]].name);
-    if(data[5] != 0){io.to(clients[data[5]].socket).emit('GUESS',data)};
+    if(data[5] !== 0){io.to(clients[data[5]].socket).emit('GUESS',data)};
   });
 
   socket.on('CLIENT_GUESS_RESPONSE', data => {
     console.log('CLIENT_GUESS_RESPONSE',data);
     console.log('Sending SERVER_GUESS_RESPONSE to: ',clients[data[3]].name);
-    if(data[3] != 0){io.to(clients[data[3]].socket).emit('SERVER_GUESS_RESPONSE',data)};
+    if(data[3] !== 0){io.to(clients[data[3]].socket).emit('SERVER_GUESS_RESPONSE',data)};
   });
 
   socket.on('SET_LOOKING_FOR_OPP_FLAG', data => {

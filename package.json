@@ -8,7 +8,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "socket.io": "^2.2.0",
     "vue-socket.io": "^3.0.7"
   },
